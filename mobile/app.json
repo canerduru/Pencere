@@ -1,0 +1,27 @@
+{
+  "expo": {
+    "name": "Pencere",
+    "slug": "pencere",
+    "version": "1.0.0",
+    "orientation": "default",
+    "icon": "./assets/icon.png",
+    "userInterfaceStyle": "dark",
+    "ios": {
+      "supportsTablet": false,
+      "bundleIdentifier": "com.pencere.app",
+      "infoPlist": {
+        "NSMicrophoneUsageDescription": "Pencere ses özelliği için mikrofona erişim gerektirir.",
+        "NSPhotoLibraryUsageDescription": "Kendi manzara fotoğraflarını eklemek için galeri erişimi gereklidir."
+      }
+    },
+    "android": {
+      "adaptiveIcon": {
+        "backgroundColor": "#0d1a14",
+        "foregroundImage": "./assets/android-icon-foreground.png"
+      }
+    },
+    "plugins": [
+      "expo-image-picker"
+    ]
+  }
+}
