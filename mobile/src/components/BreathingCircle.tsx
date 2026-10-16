@@ -19,7 +19,8 @@ export function BreathingCircle({
   maxScale = 1,
 }: BreathingCircleProps) {
   const scale = useRef(new Animated.Value(minScale)).current;
-  const opacity = useRef(new Animated.Value(0.3)).current;
+  const opacity = useRef(new Animated.Value(0.4)).current;
+  const visibility = useRef(new Animated.Value(active ? 1 : 0)).current;
 
   useEffect(() => {
     if (!active) {
@@ -34,9 +35,20 @@ export function BreathingCircle({
           duration: 500,
           useNativeDriver: true,
         }),
+        Animated.timing(visibility, {
+          toValue: 0,
+          duration: 500,
+          useNativeDriver: true,
+        }),
       ]).start();
       return;
     }
+
+    Animated.timing(visibility, {
+      toValue: 1,
+      duration: 500,
+      useNativeDriver: true,
+    }).start();
 
     const loop = Animated.loop(
       Animated.parallel([
@@ -73,7 +85,7 @@ export function BreathingCircle({
     loop.start();
 
     return () => loop.stop();
-  }, [active, inhaleMs, exhaleMs, minScale, maxScale, scale, opacity]);
+  }, [active, inhaleMs, exhaleMs, minScale, maxScale, scale, opacity, visibility]);
 
   const innerSize = size * 0.6;
 
@@ -85,6 +97,7 @@ export function BreathingCircle({
           width: size,
           height: size,
           borderRadius: size / 2,
+          opacity: visibility,
           transform: [{ scale }],
         },
       ]}
