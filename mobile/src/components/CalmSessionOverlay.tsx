@@ -1,7 +1,6 @@
 import React, { useEffect, useRef } from 'react';
 import {
   AppState,
-  AppStateStatus,
   Pressable,
   StyleSheet,
   Text,
@@ -21,16 +20,24 @@ export function CalmSessionOverlay({ session, onClose }: CalmSessionOverlayProps
   const { stepIndex, step, stepProgress, isPaused, isFinished, next, togglePause, setPaused } =
     useCalmSession(session);
 
-  // Arka plana alınınca duraklat, dönünce devam ettir
-  const appStateRef = useRef<AppStateStatus>(AppState.currentState);
+  // Arka plana alınınca duraklat, dönünce sadece otomatik duraklamayı devam ettir
+  const isPausedRef = useRef(isPaused);
+  useEffect(() => {
+    isPausedRef.current = isPaused;
+  });
+  const autoPausedRef = useRef(false);
+
   useEffect(() => {
     const sub = AppState.addEventListener('change', (state) => {
       if (state !== 'active') {
-        setPaused(true);
-      } else if (appStateRef.current !== 'active') {
+        if (!isPausedRef.current) {
+          autoPausedRef.current = true;
+          setPaused(true);
+        }
+      } else if (autoPausedRef.current) {
+        autoPausedRef.current = false;
         setPaused(false);
       }
-      appStateRef.current = state;
     });
     return () => sub.remove();
   }, [setPaused]);

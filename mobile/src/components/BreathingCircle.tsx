@@ -20,7 +20,7 @@ export function BreathingCircle({
 }: BreathingCircleProps) {
   const scale = useRef(new Animated.Value(minScale)).current;
   const opacity = useRef(new Animated.Value(0.4)).current;
-  const visibility = useRef(new Animated.Value(active ? 1 : 0)).current;
+  const visibility = useRef(new Animated.Value(0)).current;
 
   useEffect(() => {
     if (!active) {

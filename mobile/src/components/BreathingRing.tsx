@@ -1,6 +1,8 @@
 import React from 'react';
-import { View, StyleSheet } from 'react-native';
+import { View, StyleSheet, Dimensions } from 'react-native';
 import { BreathingCircle } from './BreathingCircle';
+
+const RING_SIZE = Dimensions.get('window').width * 0.52;
 
 interface BreathingRingProps {
   enabled: boolean;
@@ -12,7 +14,7 @@ export function BreathingRing({ enabled, isPaused }: BreathingRingProps) {
 
   return (
     <View style={styles.container} pointerEvents="none">
-      <BreathingCircle active={!isPaused} size={220} />
+      <BreathingCircle active={!isPaused} size={RING_SIZE} />
     </View>
   );
 }
