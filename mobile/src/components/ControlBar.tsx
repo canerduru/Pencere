@@ -21,6 +21,7 @@ interface ControlBarProps {
   onToggleBreathing: () => void;
   onOpenGallery: () => void;
   onOpenSettings: () => void;
+  onStartCalm: () => void;
 }
 
 export function ControlBar({
@@ -35,6 +36,7 @@ export function ControlBar({
   onToggleBreathing,
   onOpenGallery,
   onOpenSettings,
+  onStartCalm,
 }: ControlBarProps) {
   const { width, height } = useWindowDimensions();
   const isLandscape = width > height;
@@ -77,6 +79,11 @@ export function ControlBar({
             style={[styles.controlBtn, breathingEnabled && styles.controlBtnActive]}
           >
             <Text style={styles.icon}>🫧</Text>
+          </TouchableOpacity>
+
+          {/* Sakinleş */}
+          <TouchableOpacity onPress={onStartCalm} style={styles.controlBtn} accessibilityRole="button" accessibilityLabel="Sakinleş">
+            <Text style={styles.icon}>🌿</Text>
           </TouchableOpacity>
 
           <View style={styles.separator} />

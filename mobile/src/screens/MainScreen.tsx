@@ -16,6 +16,8 @@ import { ControlBar } from '../components/ControlBar';
 import { GallerySheet } from '../components/GallerySheet';
 import { SettingsSheet } from '../components/SettingsSheet';
 import { AudioBridge } from '../components/AudioBridge';
+import { CalmSessionOverlay } from '../components/CalmSessionOverlay';
+import { CALM_SESSION } from '../config/calmSession';
 import { DEFAULT_SETTINGS, loadSettings, saveSettings } from '../utils/settings';
 
 const SWIPE_THRESHOLD = 60;
@@ -33,6 +35,7 @@ export function MainScreen({ onGoBack }: MainScreenProps) {
   const [settingsLoaded, setSettingsLoaded] = useState(false);
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
   const [isSettingsOpen, setIsSettingsOpen] = useState(false);
+  const [isCalmOpen, setIsCalmOpen] = useState(false);
   const [areControlsVisible, setAreControlsVisible] = useState(true);
   const [showWatchExit, setShowWatchExit] = useState(false);
 
@@ -56,12 +59,12 @@ export function MainScreen({ onGoBack }: MainScreenProps) {
 
   // Auto cycle scenes
   useEffect(() => {
-    if (!settings.autoCycleScenes) return;
+    if (!settings.autoCycleScenes || isCalmOpen) return;
     const intervalId = setInterval(() => {
       setCurrentIndex((i) => (i + 1) % SCENES.length);
     }, settings.autoCycleIntervalMinutes * 60 * 1000);
     return () => clearInterval(intervalId);
-  }, [settings.autoCycleScenes, settings.autoCycleIntervalMinutes]);
+  }, [settings.autoCycleScenes, settings.autoCycleIntervalMinutes, isCalmOpen]);
 
   // Swipe gesture to change scene + tap to toggle controls
   const touchStartX = useRef(0);
@@ -74,8 +77,8 @@ export function MainScreen({ onGoBack }: MainScreenProps) {
   // When a sheet is open, its ScrollView must receive touches
   const sheetOpenRef = useRef(false);
   useEffect(() => {
-    sheetOpenRef.current = isGalleryOpen || isSettingsOpen;
-  }, [isGalleryOpen, isSettingsOpen]);
+    sheetOpenRef.current = isGalleryOpen || isSettingsOpen || isCalmOpen;
+  }, [isGalleryOpen, isSettingsOpen, isCalmOpen]);
 
   const panResponder = useRef(
     PanResponder.create({
@@ -172,7 +175,7 @@ export function MainScreen({ onGoBack }: MainScreenProps) {
       )}
 
       {/* Control bar */}
-      {!isGalleryOpen && !isSettingsOpen && !settings.onlyWatchMode && areControlsVisible && (
+      {!isGalleryOpen && !isSettingsOpen && !isCalmOpen && !settings.onlyWatchMode && areControlsVisible && (
         <ControlBar
           scene={currentScene}
           sceneIndex={currentIndex}
@@ -190,6 +193,7 @@ export function MainScreen({ onGoBack }: MainScreenProps) {
           }
           onOpenGallery={() => setIsGalleryOpen(true)}
           onOpenSettings={() => setIsSettingsOpen(true)}
+          onStartCalm={() => setIsCalmOpen(true)}
         />
       )}
 
@@ -205,6 +209,14 @@ export function MainScreen({ onGoBack }: MainScreenProps) {
         >
           <Text style={styles.watchExitText}>İzleme Modundan Çık</Text>
         </TouchableOpacity>
+      )}
+
+      {/* Rehberli sakinleşme seansı */}
+      {isCalmOpen && (
+        <CalmSessionOverlay
+          session={CALM_SESSION}
+          onClose={() => setIsCalmOpen(false)}
+        />
       )}
     </View>
   );
