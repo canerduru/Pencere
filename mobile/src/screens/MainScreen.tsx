@@ -151,7 +151,7 @@ export function MainScreen({ onGoBack }: MainScreenProps) {
 
       {/* Breathing ring overlay */}
       <BreathingRing
-        enabled={settings.breathingExerciseEnabled}
+        enabled={settings.breathingExerciseEnabled && !isCalmOpen}
         isPaused={isPaused}
       />
 

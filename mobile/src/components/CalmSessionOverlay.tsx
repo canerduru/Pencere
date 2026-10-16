@@ -59,8 +59,11 @@ export function CalmSessionOverlay({ session, onClose }: CalmSessionOverlayProps
     <Pressable style={styles.root} onPress={next}>
       <View style={styles.scrim} />
 
-      {/* Sol: nefes halkası */}
-      <View style={styles.left}>
+      {/* Sol: boşluk (metin sağda kalsın) */}
+      <View style={styles.left} />
+
+      {/* Nefes halkası: ekranın ortasında */}
+      <View style={styles.ring} pointerEvents="none">
         <BreathingCircle active={!isPaused && !isFinished} size={150} inhaleMs={4000} exhaleMs={6000} />
       </View>
 
@@ -122,6 +125,9 @@ const styles = StyleSheet.create({
   },
   left: {
     width: '42%',
+  },
+  ring: {
+    ...StyleSheet.absoluteFill,
     alignItems: 'center',
     justifyContent: 'center',
   },
