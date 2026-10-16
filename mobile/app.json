@@ -3,7 +3,7 @@
     "name": "Pencere",
     "slug": "pencere",
     "version": "1.0.0",
-    "orientation": "default",
+    "orientation": "landscape",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "dark",
     "ios": {
