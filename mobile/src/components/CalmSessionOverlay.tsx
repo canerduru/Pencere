@@ -36,12 +36,17 @@ export function CalmSessionOverlay({ session, onClose }: CalmSessionOverlayProps
   }, [setPaused]);
 
   // Seans bitince nazikçe kapat
+  const onCloseRef = useRef(onClose);
+  useEffect(() => {
+    onCloseRef.current = onClose;
+  });
+
   useEffect(() => {
     if (isFinished) {
-      const id = setTimeout(onClose, 1200);
+      const id = setTimeout(() => onCloseRef.current(), 1200);
       return () => clearTimeout(id);
     }
-  }, [isFinished, onClose]);
+  }, [isFinished]);
 
   return (
     <Pressable style={styles.root} onPress={next}>
@@ -68,12 +73,24 @@ export function CalmSessionOverlay({ session, onClose }: CalmSessionOverlayProps
       </View>
 
       {/* Üst sağ: kapat */}
-      <TouchableOpacity style={styles.close} onPress={onClose} hitSlop={12}>
+      <TouchableOpacity
+        style={styles.close}
+        onPress={onClose}
+        hitSlop={12}
+        accessibilityRole="button"
+        accessibilityLabel="Kapat"
+      >
         <Text style={styles.closeText}>✕</Text>
       </TouchableOpacity>
 
       {/* Alt: duraklat */}
-      <TouchableOpacity style={styles.pause} onPress={togglePause} hitSlop={12}>
+      <TouchableOpacity
+        style={styles.pause}
+        onPress={togglePause}
+        hitSlop={12}
+        accessibilityRole="button"
+        accessibilityLabel={isPaused ? 'Devam et' : 'Duraklat'}
+      >
         <Text style={styles.pauseText}>{isPaused ? '▶  Devam' : '⏸  Duraklat'}</Text>
       </TouchableOpacity>
 
